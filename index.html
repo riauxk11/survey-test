@@ -493,7 +493,9 @@ function submit(){
     if(q.type==="multi"){
       right=JSON.stringify(a.sel.sort())===JSON.stringify(q.answer.sort());
     }else{
-      right=q.answer===q.options[a.sel[0]];
+      // 单选题：用户选择的选项文字必须以正确答案字母开头
+      const userAnswerText=q.options[a.sel[0]];
+      right=userAnswerText.startsWith(q.answer);
     }
     if(right)score++;
     else {
