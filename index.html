@@ -83,13 +83,13 @@ th{background:#f8f9fa;font-weight:600;}
    一、学生名单（已内置）
    ========================= */
 const students = [
-{no:"20221301",name:"萧杰涛"},{no:"20221302",name:"曾德信"},{no:"20221303",name:"叶槿"},
-{no:"20221304",name:"彭斯琰"},{no:"20221305",name:"廖晨凯"},{no:"20221307",name:"朱颖"},
-{no:"20221308",name:"赵政维"},{no:"20221309",name:"郭耀文"},{no:"20221310",name:"李艺鑫"},
-{no:"20221313",name:"刘涛"},{no:"20221314",name:"邓建雄"},{no:"20221315",name:"赖桂生"},
-{no:"20221316",name:"朱光榆"},{no:"20221317",name:"王林龙"},{no:"20221318",name:"邓诗颖"},
-{no:"20221320",name:"蔡日鸿"},{no:"20221322",name:"丘振峰"},{no:"20221323",name:"黄勇"},
-{no:"20221324",name:"邹才发"},{no:"20221325",name:"徐嘉鸿"},{no:"20221326",name:"梁嘉涛"}
+{no:"20221301"},{no:"20221302"},{no:"20221303"},
+{no:"20221304"},{no:"20221305"},{no:"20221307"},
+{no:"20221308"},{no:"20221309"},{no:"20221310"},
+{no:"20221313"},{no:"20221314"},{no:"20221315"},
+{no:"20221316"},{no:"20221317"},{no:"20221318"},
+{no:"20221320"},{no:"20221322"},{no:"20221323"},
+{no:"20221324"},{no:"20221325"},{no:"20221326"}
 ];
 
 /* =========================
@@ -405,7 +405,7 @@ window.onload=()=>{
   students.forEach(s=>{
     const o=document.createElement("option");
     o.value=s.no;
-    o.innerText=s.no+" "+s.name;
+    o.innerText=s.no;
     sel.appendChild(o);
   });
 
@@ -511,7 +511,6 @@ function submit(){
   // 保存成绩
   const record={
     no:currentStudent.no,
-    name:currentStudent.name,
     score,
     total:questions.length,
     time:Math.round((Date.now()-startTime)/60000),
@@ -527,7 +526,7 @@ function submit(){
   resultCard.style.display="block";
   resultCard.innerHTML=`
     <h2>✅ 考试完成</h2>
-    <p>学号：${record.no} | 姓名：${record.name}</p>
+    <p>学号：${record.no}</p>
     <div class="score">${score}/${questions.length}</div>
     <p>得分率：${((score/questions.length)*100).toFixed(1)}%</p>
     <p>用时：${record.time} 分钟</p>
@@ -576,9 +575,9 @@ function loadScores(){
     container.innerHTML=`<p style="color:#999;text-align:center;padding:20px;">暂无成绩数据，请等待学生提交考试。</p>`;
     return;
   }
-  let html=`<table><tr><th>学号</th><th>姓名</th><th>分数</th><th>总分</th><th>用时（分钟）</th><th>考试时间</th></tr>`;
+  let html=`<table><tr><th>学号</th><th>分数</th><th>总分</th><th>用时（分钟）</th><th>考试时间</th></tr>`;
   scores.forEach(r=>{
-    html+=`<tr><td>${r.no}</td><td>${r.name}</td><td>${r.score}</td><td>${r.total}</td><td>${r.time}</td><td>${r.date}</td></tr>`;
+    html+=`<tr><td>${r.no}</td><td>${r.score}</td><td>${r.total}</td><td>${r.time}</td><td>${r.date}</td></tr>`;
   });
   html+=`</table>`;
   container.innerHTML=html;
