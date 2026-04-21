@@ -495,7 +495,11 @@ function submit(){
       right=q.answer===q.options[a.sel[0]];
     }
     if(right)score++;
-    else wrong.push(q);
+    else {
+      // ✅ 保存错题时带上用户答案
+      q.userAnswer = a.sel.map(idx => q.options[idx]);
+      wrong.push(q);
+    }
   });
 
   // 保存错题
@@ -514,7 +518,7 @@ function submit(){
   scores.push(record);
   localStorage.setItem("scores",JSON.stringify(scores));
 
-  // 显示结果
+  // 显示结果（含错题详情按钮）
   document.getElementById("examCard").style.display="none";
   const resultCard=document.getElementById("resultCard");
   resultCard.style.display="block";
@@ -527,8 +531,10 @@ function submit(){
     <p>错题数量：${wrong.length} 题</p>
     <div class="actions">
       <button onclick="location.href='/'">返回首页</button>
-      <button onclick="location.href='?mode=wrong'">查看错题</button>
+      <button onclick="showWrongDetails()">📋 查看错题详情</button>
+      <button onclick="location.href='?mode=wrong'">🔁 错题重练</button>
     </div>
+    <div id="wrongDetails" style="display:none;margin-top:24px;text-align:left;"></div>
   `;
 }
 
@@ -585,6 +591,28 @@ function exportExcel(){
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,"成绩统计");
   XLSX.writeFile(wb,"测绘成绩.xlsx");
+}
+
+function showWrongDetails(){
+  const box = document.getElementById("wrongDetails");
+  if(wrong.length===0){
+    box.innerHTML=`<p style="color:#666;text-align:center;">🎉 没有错题，太棒了！</p>`;
+    box.style.display="block";
+    return;
+  }
+
+  let html=`<h3 style="color:#d32f2f;">📋 错题详情</h3>`;
+  wrong.forEach((q,i)=>{
+    html+=`
+    <div style="background:#fafafa;border-radius:10px;padding:16px;margin-bottom:16px;border-left:4px solid #e53935;">
+      <p><strong>第 ${i+1} 题：${q.text}</strong></p>
+      <p style="color:#d32f2f;">❌ 你的答案：${q.userAnswer?.join("，") || "未作答"}</p>
+      <p style="color:#2e7d32;">✅ 正确答案：${Array.isArray(q.answer)?q.answer.join("，"):q.answer}</p>
+    </div>
+    `;
+  });
+  box.innerHTML=html;
+  box.style.display="block";
 }
 </script>
 </body>
